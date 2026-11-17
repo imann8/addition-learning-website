@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taman Tambah Ceria | Addition Garden Adventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Supabase JS Client (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <!-- TOP NAVIGATION & CONTROLS -->
+  <header class="top-bar no-print">
+    <div class="brand-wrap" onclick="navigateTo('home')" role="button" tabindex="0">
+      <div class="brand-badge">🌻</div>
+      <div>
+        <h1 class="brand-title" data-i18n="siteTitle">Taman Tambah Ceria</h1>
+        <span class="brand-sub" data-i18n="siteSub">Matematik Tahun 1 • SP 2.2.2</span>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Navigasi Utama">
+      <button class="nav-btn active" data-target="home" onclick="navigateTo('home')" data-i18n="navHome">Peta Taman</button>
+      <button class="nav-btn" data-target="sec-video" onclick="navigateTo('sec-video')" data-i18n="navVideo">1. Taman Video</button>
+      <button class="nav-btn" data-target="sec-concept" onclick="navigateTo('sec-concept')" data-i18n="navConcept">2. Taman Konsep</button>
+      <button class="nav-btn" data-target="sec-numline" onclick="navigateTo('sec-numline')" data-i18n="navNumline">3. Taman Garis Nombor</button>
+      <button class="nav-btn" data-target="sec-challenge" onclick="navigateTo('sec-challenge')" data-i18n="navChallenge">4. Taman Cabaran</button>
+      <button class="nav-btn" data-target="sec-feedback" onclick="navigateTo('sec-feedback')" data-i18n="navFeedback">Suara Murid</button>
+      <button class="nav-btn nav-teacher" data-target="sec-teacher" onclick="navigateTo('sec-teacher')" data-i18n="navTeacher">Guru</button>
+    </nav>
+
+    <div class="control-cluster">
+      <button id="musicToggleBtn" class="ctrl-btn" onclick="toggleMusic()" aria-label="Kawalan Muzik">
+        <span id="musicIcon">🔇</span>
+        <span id="musicLabel" data-i18n="musicOff">Muzik: Tutup</span>
+      </button>
+      <button id="langToggleBtn" class="ctrl-btn lang-btn" onclick="toggleLanguage()" aria-label="Tukar Bahasa">
+        🌐 <span id="langLabel">BM / EN</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PROGRESS TRACKER STRIP -->
+  <div class="progress-banner no-print">
+    <div class="progress-inner">
+      <span class="progress-text" data-i18n="progressLabel">Jejak Kemajuan Taman:</span>
+      <div class="progress-bar-bg">
+        <div id="globalProgressBar" class="progress-bar-fill" style="width: 0%"></div>
+      </div>
+      <span id="globalProgressPercent" class="progress-percent">0%</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="container">
+    <!-- ==================== HOMEPAGE: ADVENTURE MAP ==================== -->
+    <section id="home" class="page-section active">
+      <div class="hero-garden-card">
+        <div class="hero-overlay">
+          <div class="curriculum-pill" data-i18n="curriculumPill">KSSR Matematik Tahun 1 • SK 2.2 • SP 2.2.2 (Tambah dalam lingkungan 100)</div>
+          <h2 class="hero-title" data-i18n="heroTitle">Jom Teroka Taman Tambah!</h2>
+          <p class="hero-subtitle" data-i18n="heroSubtitle">Belajar Matematik sambil meneroka taman yang menyeronokkan.</p>
+          <p class="hero-desc" data-i18n="heroDesc">
+            Selamat datang penjelajah cilik! Ikuti laluan batu di taman botani ini untuk menonton video, mengira bunga, melompat di atas garis nombor, dan menyahut cabaran penjaga taman.
+          </p>
+          <div class="hero-actions">
+            <button class="btn-primary-red btn-lg" onclick="startAdventure()">
+              🚀 <span data-i18n="btnStartAdventure">Mula Pengembaraan</span>
+            </button>
+            <button class="btn-secondary-yellow" onclick="navigateTo('sec-pedagogy')">
+              📘 <span data-i18n="btnInfoPedagogy">Info Pembelajaran & RPH</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GARDEN PATHWAY MAP -->
+      <div class="card-surface pathway-section">
+        <div class="section-header-center">
+          <h3 data-i18n="mapTitle">Peta Laluan Taman Botani</h3>
+          <p data-i18n="mapSub">Klik mana-mana hentian taman di bawah atau ikuti langkah 1 hingga 4.</p>
+        </div>
+
+        <div class="garden-pathway">
+          <div class="pathway-line"></div>
+
+          <!-- Destination 1 -->
+          <div class="path-node" id="node-1" onclick="navigateTo('sec-video')">
+            <div class="node-status" id="status-1">1</div>
+            <div class="node-photo node-img-1"></div>
+            <div class="node-body">
+              <h4 data-i18n="dest1Title">Taman Video</h4>
+              <p data-i18n="dest1Desc">Tonton video pengenalan konsep tambah yang ceria.</p>
+              <span class="node-tag" id="tag-1" data-i18n="statusPending">Belum Selesai</span>
+            </div>
+          </div>
+
+          <!-- Destination 2 -->
+          <div class="path-node" id="node-2" onclick="navigateTo('sec-concept')">
+            <div class="node-status" id="status-2">2</div>
+            <div class="node-photo node-img-2"></div>
+            <div class="node-body">
+              <h4 data-i18n="dest2Title">Taman Konsep</h4>
+              <p data-i18n="dest2Desc">Fahami gabungan dua kumpulan bunga & papan tambah interaktif.</p>
+              <span class="node-tag" id="tag-2" data-i18n="statusPending">Belum Selesai</span>
+            </div>
+          </div>
+
+          <!-- Destination 3 -->
+          <div class="path-node" id="node-3" onclick="navigateTo('sec-numline')">
+            <div class="node-status" id="status-3">3</div>
+            <div class="node-photo node-img-3"></div>
+            <div class="node-body">
+              <h4 data-i18n="dest3Title">Taman Garis Nombor</h4>
+              <p data-i18n="dest3Desc">Gerakkan penanda pada garis nombor & teroka blok puluh dan sa.</p>
+              <span class="node-tag" id="tag-3" data-i18n="statusPending">Belum Selesai</span>
+            </div>
+          </div>
+
+          <!-- Destination 4 -->
+          <div class="path-node" id="node-4" onclick="navigateTo('sec-challenge')">
+            <div class="node-status" id="status-4">4</div>
+            <div class="node-photo node-img-4"></div>
+            <div class="node-body">
+              <h4 data-i18n="dest4Title">Taman Cabaran</h4>
+              <p data-i18n="dest4Desc">Jawab 5 soalan Cabaran Penjaga Taman dan cetak sijil anda!</p>
+              <span class="node-tag" id="tag-4" data-i18n="statusPending">Belum Selesai</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK LINKS FOOTER STRIP ON HOME -->
+      <div class="home-bottom-grid">
+        <div class="mini-info-card" onclick="navigateTo('sec-feedback')">
+          <span class="mini-icon">💬</span>
+          <div>
+            <h4 data-i18n="cardFeedbackTitle">Suara Penjelajah Taman</h4>
+            <p data-i18n="cardFeedbackDesc">Kongsikan pendapat anda selepas meneroka taman.</p>
+          </div>
+        </div>
+        <div class="mini-info-card" onclick="navigateTo('sec-rph')">
+          <span class="mini-icon">📋</span>
+          <div>
+            <h4 data-i18n="cardRphTitle">Rancangan Pengajaran Harian (RPH)</h4>
+            <p data-i18n="cardRphDesc">Ruang dokumentasi pengajaran guru Matematik Tahun 1.</p>
+          </div>
+        </div>
+        <div class="mini-info-card" onclick="navigateTo('sec-about')">
+          <span class="mini-icon">🎓</span>
+          <div>
+            <h4 data-i18n="cardAboutTitle">Tentang Projek & Pembangun</h4>
+            <p data-i18n="cardAboutDesc">Maklumat kurikulum, etika digital dan profil pembangun.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 1: VIDEO INDUCTION ==================== -->
+    <section id="sec-video" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="sec1Badge">Hentian 1 • Set Induksi</div>
+        <h2 class="section-title" data-i18n="videoTitle">Jom Belajar Tambah!</h2>
+        <p class="section-lead" data-i18n="videoInstruction">
+          Tonton video di bawah dengan teliti untuk mengenali asas operasi tambah. Setelah selesai menonton, tekan butang <strong>Teruskan Pembelajaran</strong> di bawah.
+        </p>
+
+        <div class="video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/09t6fLcvxbM?rel=0"
+            title="Jom Belajar Tambah!"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="video-notice-box">
+          <span>💡</span>
+          <p data-i18n="videoNotice">
+            Pastikan anda telah menonton video sehingga faham sebelum meneruskan perjalanan ke Taman Konsep.
+          </p>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('home')">⬅️ <span data-i18n="btnBackMap">Kembali ke Peta</span></button>
+          <button class="btn-primary-green btn-lg" onclick="completeVideoAndContinue()">
+            <span data-i18n="btnContinueLearning">Teruskan Pembelajaran</span> ➡️
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 2: ADDITION CONCEPT ==================== -->
+    <section id="sec-concept" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="sec2Badge">Hentian 2 • Konsep Asas Tambah</div>
+        <h2 class="section-title" data-i18n="conceptTitle">Apakah Maksud Tambah?</h2>
+        <p class="section-lead" data-i18n="conceptExplain">
+          <strong>Tambah</strong> bermaksud <strong>menggabungkan dua kumpulan objek</strong> untuk mencari jumlah kesemuanya.
+        </p>
+
+        <!-- Visual Sequence: 3 flowers + 2 flowers = 5 flowers -->
+        <div class="concept-visual-box">
+          <div class="flower-group-card">
+            <span class="group-label" data-i18n="group1Label">Kumpulan Pertama: 3 bunga</span>
+            <div class="flower-display" aria-label="3 bunga">
+              <span class="flower-item">🌺</span>
+              <span class="flower-item">🌺</span>
+              <span class="flower-item">🌺</span>
+            </div>
+            <div class="number-highlight">3</div>
+          </div>
+
+          <div class="symbol-card symbol-plus">
+            <span class="big-symbol">+</span>
+            <span class="symbol-caption" data-i18n="plusMeaning">Tambah</span>
+          </div>
+
+          <div class="flower-group-card">
+            <span class="group-label" data-i18n="group2Label">Kumpulan Kedua: 2 bunga</span>
+            <div class="flower-display" aria-label="2 bunga">
+              <span class="flower-item">🌻</span>
+              <span class="flower-item">🌻</span>
+            </div>
+            <div class="number-highlight">2</div>
+          </div>
+
+          <div class="symbol-card symbol-equals">
+            <span class="big-symbol">=</span>
+            <span class="symbol-caption" data-i18n="equalsMeaning">Sama dengan</span>
+          </div>
+
+          <div class="flower-group-card total-group-card">
+            <span class="group-label" data-i18n="groupTotalLabel">Jumlah Gabungan: 5 bunga</span>
+            <div class="flower-display" aria-label="5 bunga">
+              <span class="flower-item">🌺</span>
+              <span class="flower-item">🌺</span>
+              <span class="flower-item">🌺</span>
+              <span class="flower-item">🌻</span>
+              <span class="flower-item">🌻</span>
+            </div>
+            <div class="number-highlight total-num">5</div>
+          </div>
+        </div>
+
+        <div class="math-sentence-banner">
+          <span data-i18n="mathSentenceLabel">Ayat Matematik:</span>
+          <strong class="math-equation-big">3 <span class="hl-red">+</span> 2 <span class="hl-yellow">=</span> 5</strong>
+        </div>
+
+        <!-- Symbol Explanation Cards -->
+        <div class="symbol-info-grid">
+          <div class="sym-explain-box sym-box-red">
+            <div class="sym-circle">+</div>
+            <div>
+              <h4 data-i18n="symPlusTitle">Simbol Tambah (+)</h4>
+              <p data-i18n="symPlusDesc">Digunakan apabila kita menggabungkan atau menambah dua bilangan.</p>
+            </div>
+          </div>
+          <div class="sym-explain-box sym-box-yellow">
+            <div class="sym-circle">=</div>
+            <div>
+              <h4 data-i18n="symEqualsTitle">Simbol Sama Dengan (=)</h4>
+              <p data-i18n="symEqualsDesc">Menunjukkan jumlah keseluruhan selepas kedua-dua kumpulan digabungkan.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE ADDITION BOARD (0 to 20) -->
+        <div class="interactive-board-card">
+          <h3 data-i18n="boardTitle">Papan Tambah Interaktif (0 hingga 20)</h3>
+          <p data-i18n="boardGuide">
+            Ikuti urutan klik: <strong>1. Pilih Nombor Pertama</strong> ➔ <strong>2. Klik (+)</strong> ➔ <strong>3. Pilih Nombor Kedua</strong> ➔ <strong>4. Klik (=)</strong>.
+          </p>
+
+          <!-- Equation Display -->
+          <div class="board-equation-screen">
+            <div id="slotNum1" class="eq-slot active-slot">?</div>
+            <button id="boardPlusBtn" class="eq-op-btn eq-plus-btn" onclick="handleBoardPlus()">+</button>
+            <div id="slotNum2" class="eq-slot">?</div>
+            <button id="boardEqualsBtn" class="eq-op-btn eq-equals-btn" onclick="handleBoardEquals()">=</button>
+            <div id="slotResult" class="eq-slot eq-result-slot">?</div>
+          </div>
+
+          <div id="boardFeedbackMsg" class="board-feedback" data-i18n="boardStep1Prompt">
+            Langkah 1: Sila klik nombor pertama pada papan nombor di bawah.
+          </div>
+
+          <!-- Visual Flower Counter inside Board -->
+          <div id="boardVisualFlowers" class="board-visual-area"></div>
+
+          <!-- Number Pad 0-20 -->
+          <div id="boardNumberPad" class="number-pad-grid"></div>
+
+          <div class="board-controls">
+            <button class="btn-outline" onclick="resetAdditionBoard()">🔄 <span data-i18n="btnReset">Set Semula</span></button>
+          </div>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('sec-video')">⬅️ <span data-i18n="btnPrevSection">Sebelum</span></button>
+          <button class="btn-primary-green btn-lg" onclick="completeConceptAndContinue()">
+            <span data-i18n="btnToNumline">Ke Taman Garis Nombor</span> ➡️
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 3: INTERACTIVE NUMBER LINE & PLACE VALUE ==================== -->
+    <section id="sec-numline" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="sec3Badge">Hentian 3 • Garis Nombor & Nilai Tempat</div>
+        <h2 class="section-title" data-i18n="nlTitle">Taman Garis Nombor Interaktif (0 – 20)</h2>
+        <p class="section-lead" data-i18n="nlIntro">
+          Sentuh dan <strong>seret penanda kumbang (🐞)</strong> ke kanan di atas garis nombor untuk melakukan operasi tambah.
+        </p>
+
+        <!-- Exercise Selector & Status -->
+        <div class="nl-top-panel">
+          <div class="nl-exercise-badge">
+            <span data-i18n="nlQuestionCounter">Soalan</span> <span id="nlQIndex">1</span> / 10
+          </div>
+          <div class="nl-equation-banner">
+            <span id="nlCurrentQuestionText">4 + 3 = ?</span>
+          </div>
+          <div class="nl-live-readout">
+            <div><small data-i18n="nlStartLabel">Mula:</small> <strong id="nlStartVal">4</strong></div>
+            <div><small data-i18n="nlJumpsLabel">Lompatan:</small> <strong id="nlJumpVal">0</strong> / <strong id="nlTargetJumps">3</strong></div>
+            <div><small data-i18n="nlCurrentLabel">Kedudukan:</small> <strong id="nlCurrentVal" class="hl-red">4</strong></div>
+          </div>
+        </div>
+
+        <!-- Step-by-step instructions -->
+        <div id="nlStepInstruction" class="nl-instruction-strip">
+          1. Mula di nombor 4. 2. Seret penanda 3 langkah ke kanan. 3. Berhenti di nombor 7 dan tekan Semak Jawapan.
+        </div>
+
+        <!-- DRAGGABLE NUMBER LINE CANVAS / SVG TRACK -->
+        <div class="numberline-stage">
+          <div class="nl-scroll-hint" data-i18n="nlTouchHint">👆 Sentuh & seret penanda 🐞 ke kanan di sepanjang garis nombor</div>
+          <div id="numberLineTrack" class="nl-track" role="slider" aria-valuemin="0" aria-valuemax="20" aria-valuenow="4" tabindex="0">
+            <!-- Jump Arcs SVG Overlay -->
+            <svg id="nlArcsSvg" class="nl-arcs-svg" viewBox="0 0 1000 120" preserveAspectRatio="none"></svg>
+            <!-- Ticks & Numbers rendered by JS -->
+            <div id="nlTicksContainer" class="nl-ticks-container"></div>
+            <!-- Draggable Marker -->
+            <div id="nlDraggableMarker" class="nl-marker" title="Seret saya!">
+              <div class="marker-bubble" id="markerBubbleVal">4</div>
+              <div class="marker-avatar">🐞</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback Banner -->
+        <div id="nlFeedbackBanner" class="feedback-banner hidden"></div>
+
+        <!-- Number Line Controls -->
+        <div class="nl-controls-bar">
+          <button class="btn-outline" onclick="nlStepBackward()">⏪ <span data-i18n="btnPrevStep">Langkah Sebelum</span></button>
+          <button class="btn-outline" onclick="nlStepForward()">⏩ <span data-i18n="btnNextStep">Langkah Seterusnya</span></button>
+          <button class="btn-secondary-yellow" onclick="nlAnimateSolution()">✨ <span data-i18n="btnAnimateJumps">Tunjuk Lompatan</span></button>
+          <button class="btn-primary-green" onclick="nlCheckAnswer()">✅ <span data-i18n="btnCheckAnswer">Semak Jawapan</span></button>
+          <button class="btn-outline" onclick="nlResetCurrent()">🔄 <span data-i18n="btnReset">Set Semula</span></button>
+          <button class="btn-primary-red" onclick="nlNextQuestion()">➡️ <span data-i18n="btnNextQuestion">Soalan Seterusnya</span></button>
+        </div>
+
+        <!-- CURRICULUM BRIDGE: ADDITION WITHIN 100 (TENS & ONES PLACE VALUE BLOCKS) -->
+        <div class="place-value-bridge-card">
+          <div class="bridge-header">
+            <span class="bridge-tag" data-i18n="pvTag">Penerokaan Lanjutan • SP 2.2.2 (Dalam Lingkungan 100)</span>
+            <h3 data-i18n="pvTitle">Tambah Nombor Lebih Besar Menggunakan Blok Puluh & Sa</h3>
+            <p data-i18n="pvDesc">
+              Garis nombor 0–20 membantu kita memahami asas lompatan ke kanan. Untuk nombor yang lebih besar sehingga 100 (contohnya <strong>23 + 14</strong>), kita menggabungkan <strong>Puluh</strong> dan <strong>Sa</strong> menggunakan blok asas sepuluh!
+            </p>
+          </div>
+
+          <div class="pv-selector-bar">
+            <label for="pvPresetSelect" data-i18n="pvSelectLabel">Pilih Contoh Nombor Besar:</label>
+            <select id="pvPresetSelect" onchange="renderPlaceValueExample()">
+              <option value="23,14">23 + 14 = 37</option>
+              <option value="30,20">30 + 20 = 50</option>
+              <option value="41,8">41 + 8 = 49</option>
+              <option value="26,13">26 + 13 = 39</option>
+              <option value="54,32">54 + 32 = 86</option>
+            </select>
+          </div>
+
+          <div id="pvVisualStage" class="pv-stage"></div>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('sec-concept')">⬅️ <span data-i18n="btnPrevSection">Sebelum</span></button>
+          <button class="btn-primary-green btn-lg" onclick="completeNumlineAndContinue()">
+            <span data-i18n="btnToChallenge">Ke Taman Cabaran</span> ➡️
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 4: GAMIFIED E-ASSESSMENT ==================== -->
+    <section id="sec-challenge" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="sec4Badge">Hentian 4 • Penilaian Interaktif (SP 2.2.2)</div>
+        <h2 class="section-title" data-i18n="quizMainTitle">Garden Challenge – Cabaran Penjaga Taman</h2>
+        <p class="section-lead" data-i18n="quizSubtitle">
+          Jawab kesemua 5 soalan tambah dalam lingkungan 100 untuk membantu Penjaga Taman dan dapatkan sijil pencapaian anda!
+        </p>
+
+        <!-- STEP A: PUPIL NAME ENTRY -->
+        <div id="quizStartPanel" class="quiz-start-box">
+          <div class="gardener-avatar">🧑‍🌾</div>
+          <h3 data-i18n="quizEnterNameTitle">Masukkan Nama Penjelajah Taman</h3>
+          <p data-i18n="quizEnterNameDesc">Nama anda akan dipaparkan pada rekod skor dan Sijil Pencapaian Taman Tambah Ceria.</p>
+          <div class="name-input-group">
+            <input type="text" id="pupilNameInput" maxlength="50" placeholder="Contoh: Ahmad Danial" />
+            <button class="btn-primary-red btn-lg" onclick="startQuiz()">
+              🌟 <span data-i18n="btnStartQuiz">Mula Cabaran</span>
+            </button>
+          </div>
+          <p id="quizNameError" class="error-text hidden" data-i18n="errEnterName">Sila masukkan nama anda sebelum memulakan cabaran.</p>
+        </div>
+
+        <!-- STEP B: ACTIVE QUESTION SCREEN -->
+        <div id="quizQuestionPanel" class="quiz-active-box hidden">
+          <div class="quiz-topbar">
+            <span>👤 <strong id="displayPupilName">Murid</strong></span>
+            <span><span data-i18n="quizProgressLabel">Soalan</span> <strong id="quizCurrentNum">1</strong> / 5</span>
+            <span>⭐ <span data-i18n="quizScoreLabel">Skor Semasa:</span> <strong id="quizLiveScore">0</strong></span>
+          </div>
+
+          <div class="quiz-question-card">
+            <div id="quizContextVisual" class="quiz-visual-banner">🌺 + 🌺</div>
+            <h3 id="quizQuestionText" class="quiz-q-text">Soalan di sini</h3>
+            <div id="quizOptionsGrid" class="quiz-options-grid"></div>
+          </div>
+
+          <div id="quizImmediateFeedback" class="feedback-banner hidden"></div>
+
+          <div class="quiz-nav-actions">
+            <button id="quizNextBtn" class="btn-primary-green btn-lg hidden" onclick="nextQuizQuestion()">
+              <span data-i18n="btnNextQuizQ">Soalan Seterusnya</span> ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP C: RESULTS & CERTIFICATE -->
+        <div id="quizResultPanel" class="quiz-result-box hidden">
+          <div class="result-trophy" id="resultTrophyIcon">🏆</div>
+          <h3 id="resultAchievementTitle" class="achievement-title">Excellent Garden Explorer!</h3>
+          <p class="result-score-text">
+            <span data-i18n="resultScorePrefix">Skor Anda:</span> <strong id="finalScoreDisplay">5 / 5</strong>
+          </p>
+          <p id="resultEncouragement" class="encouragement-msg"></p>
+          <p id="saveStatusNote" class="save-status-note"></p>
+
+          <!-- Review Answers List -->
+          <div id="quizReviewList" class="quiz-review-list"></div>
+
+          <!-- Printable Certificate (Shown if score >= 4/5) -->
+          <div id="certificateWrapper" class="certificate-section hidden">
+            <div id="printableCertificate" class="certificate-frame">
+              <div class="cert-border-inner">
+                <div class="cert-header-icons">🌻 🦋 🌳 🦋 🌻</div>
+                <div class="cert-kssr">KSSR MATEMATIK TAHUN 1 • SK 2.2 • SP 2.2.2</div>
+                <h2 class="cert-main-title" data-i18n="certHeading">SIJIL PENCAPAIAN</h2>
+                <p class="cert-sub" data-i18n="certSub">Dengan ini disahkan bahawa</p>
+                <div id="certPupilName" class="cert-pupil-name">Nama Murid</div>
+                <p class="cert-body" data-i18n="certBody">
+                  telah berjaya menamatkan cabaran pembelajaran interaktif di
+                </p>
+                <div class="cert-site-name">Taman Tambah Ceria (Addition Garden Adventure)</div>
+                <div id="certAchievementBadge" class="cert-achievement-pill">Excellent Garden Explorer!</div>
+                <div class="cert-meta-row">
+                  <div><span data-i18n="certScoreLabel">Skor:</span> <strong id="certScoreVal">5/5</strong></div>
+                  <div><span data-i18n="certDateLabel">Tarikh:</span> <strong id="certDateVal">17/11/2026</strong></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn-secondary-yellow btn-lg no-print" onclick="printCertificate()">
+              🖨️ <span data-i18n="btnPrintCert">Cetak / Simpan Sijil (PDF)</span>
+            </button>
+          </div>
+
+          <div class="result-actions no-print">
+            <button class="btn-primary-red" onclick="retryQuiz()">🔄 <span data-i18n="btnTryAgain">Cuba Lagi</span></button>
+            <button class="btn-outline" onclick="navigateTo('sec-feedback')">💬 <span data-i18n="btnGiveFeedback">Beri Maklum Balas</span></button>
+            <button class="btn-outline" onclick="navigateTo('home')">🏡 <span data-i18n="btnBackMap">Kembali ke Peta</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PUPIL FEEDBACK: SUARA PENJELAJAH TAMAN ==================== -->
+    <section id="sec-feedback" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="fbBadge">Maklum Balas Murid</div>
+        <h2 class="section-title" data-i18n="fbTitle">Suara Penjelajah Taman</h2>
+        <p class="section-lead" data-i18n="fbIntro">
+          Ceritakan pengalaman kamu meneroka Taman Tambah Ceria! (Tiada e-mel atau maklumat peribadi dipaparkan secara umum).
+        </p>
+
+        <form id="pupilFeedbackForm" class="feedback-form" onsubmit="submitPupilFeedback(event)">
+          <div class="form-group">
+            <label for="fbName" data-i18n="fbNameLabel">Nama Panggilan (Pilihan):</label>
+            <input type="text" id="fbName" maxlength="35" placeholder="Contoh: Aisyah / Penjelajah Cilik" />
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="fbQ1Label">1. Adakah laman web ini mudah digunakan?</label>
+            <div class="emoji-radio-group" id="fbEasyGroup">
+              <label class="emoji-option"><input type="radio" name="fbEasy" value="Sangat Mudah 😄" required /> <span>😄 <small data-i18n="optVeryEasy">Sangat Mudah</small></span></label>
+              <label class="emoji-option"><input type="radio" name="fbEasy" value="Mudah 🙂" /> <span>🙂 <small data-i18n="optEasy">Mudah</small></span></label>
+              <label class="emoji-option"><input type="radio" name="fbEasy" value="Perlukan Bantuan 🤔" /> <span>🤔 <small data-i18n="optNeedHelp">Perlukan Bantuan</small></span></label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fbFavActivity" data-i18n="fbQ2Label">2. Aktiviti manakah yang paling kamu sukai?</label>
+            <select id="fbFavActivity" required>
+              <option value="Taman Video" data-i18n="actOpt1">1. Taman Video (Jom Belajar Tambah)</option>
+              <option value="Taman Konsep & Papan Tambah" data-i18n="actOpt2">2. Taman Konsep & Papan Tambah</option>
+              <option value="Taman Garis Nombor" data-i18n="actOpt3">3. Taman Garis Nombor Interaktif</option>
+              <option value="Taman Cabaran" data-i18n="actOpt4">4. Cabaran Penjaga Taman (Kuiz)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="fbQ3Label">3. Adakah garis nombor membantu kamu memahami konsep tambah?</label>
+            <div class="emoji-radio-group">
+              <label class="emoji-option"><input type="radio" name="fbNumlineHelp" value="Ya, sangat membantu! 🌟" required /> <span>🌟 <small data-i18n="optYesLot">Ya, sangat membantu!</small></span></label>
+              <label class="emoji-option"><input type="radio" name="fbNumlineHelp" value="Ya, membantu 👍" /> <span>👍 <small data-i18n="optYes">Ya, membantu</small></span></label>
+              <label class="emoji-option"><input type="radio" name="fbNumlineHelp" value="Sedikit 😐" /> <span>😐 <small data-i18n="optLittle">Sedikit</small></span></label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fbImprove" data-i18n="fbQ4Label">4. Apakah yang ingin kamu tambah baik atau komen ringkas?</label>
+            <textarea id="fbImprove" rows="3" maxlength="250" placeholder="Tulis cadangan kamu di sini..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary-green btn-lg">
+            📨 <span data-i18n="btnSubmitFeedback">Hantar Maklum Balas</span>
+          </button>
+        </form>
+
+        <div id="fbSubmitAlert" class="feedback-banner hidden"></div>
+
+        <!-- Public Feedback Wall -->
+        <div class="public-feedback-wall">
+          <h3 data-i18n="fbWallTitle">Dinding Suara Penjelajah Taman</h3>
+          <div id="publicFeedbackList" class="feedback-cards-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TEACHER DASHBOARD ==================== -->
+    <section id="sec-teacher" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge" data-i18n="tdBadge">Ruang Guru • Pemantauan & Rekod</div>
+        <h2 class="section-title" data-i18n="tdTitle">Papan Pemuka Guru (Teacher Dashboard)</h2>
+
+        <!-- Storage Mode Banner -->
+        <div id="dbConnectionBanner" class="db-status-banner local-mode">
+          <strong id="dbModeTitle">Mod Demonstrasi Tempatan (Local Browser Mode)</strong>
+          <p id="dbModeDesc">
+            Kredensial Supabase belum dikonfigurasi dalam <code>script.js</code>. Rekod ujian dan maklum balas disimpan dalam pelayar/peranti semasa sahaja (<code>localStorage</code>) dan tidak disegerakkan merentas peranti lain sehingga Supabase disambungkan.
+          </p>
+        </div>
+
+        <!-- Teacher Auth Panel -->
+        <div id="teacherLoginBox" class="teacher-auth-card">
+          <h3 data-i18n="tdLoginTitle">Log Masuk Guru</h3>
+          <p data-i18n="tdLoginHint">
+            Gunakan akaun guru Supabase yang didaftarkan (atau kata laluan demo tempatan: <code>guru1234</code> apabila dalam Mod Demonstrasi).
+          </p>
+          <div class="teacher-login-grid">
+            <input type="email" id="teacherEmail" placeholder="Emel Guru (cth: guru@moe-dl.edu.my)" />
+            <input type="password" id="teacherPassword" placeholder="Kata Laluan" />
+            <button class="btn-primary-green" onclick="teacherLogin()">🔐 <span data-i18n="btnTeacherLogin">Log Masuk</span></button>
+          </div>
+          <p id="teacherAuthMsg" class="error-text hidden"></p>
+        </div>
+
+        <!-- Authenticated Teacher Workspace -->
+        <div id="teacherWorkspace" class="hidden">
+          <div class="teacher-toolbar">
+            <div class="teacher-filters">
+              <input type="text" id="searchPupilInput" oninput="renderTeacherRecords()" placeholder="🔍 Cari nama murid..." />
+              <select id="filterScoreSelect" onchange="renderTeacherRecords()">
+                <option value="all">Semua Skor (0–5)</option>
+                <option value="high">Cemerlang (4–5 / 5)</option>
+                <option value="mid">Sederhana (3 / 5)</option>
+                <option value="low">Perlu Bimbingan (0–2 / 5)</option>
+              </select>
+            </div>
+            <div class="teacher-actions">
+              <button class="btn-secondary-yellow" onclick="exportRecordsCSV()">📥 Eksport CSV</button>
+              <button class="btn-outline" onclick="teacherLogout()">🚪 Log Keluar</button>
+            </div>
+          </div>
+
+          <!-- Summary Stats -->
+          <div class="stats-row">
+            <div class="stat-box"><span id="statTotalPupils">0</span><small>Jumlah Rekod</small></div>
+            <div class="stat-box"><span id="statAvgScore">0.0</span><small>Purata Skor (/5)</small></div>
+            <div class="stat-box"><span id="statCertCount">0</span><small>Layak Sijil (≥4/5)</small></div>
+          </div>
+
+          <!-- Assessment Records Table -->
+          <h3 class="sub-heading">Rekod Penilaian Murid (Cabaran Penjaga Taman)</h3>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nama Murid</th>
+                  <th>Skor</th>
+                  <th>Tahap Pencapaian</th>
+                  <th>Tarikh</th>
+                  <th>Tindakan</th>
+                </tr>
+              </thead>
+              <tbody id="teacherRecordsBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Individual Answer Detail Modal/Drawer -->
+          <div id="pupilDetailBox" class="pupil-detail-drawer hidden">
+            <div class="drawer-header">
+              <h4 id="detailPupilHeading">Perincian Jawapan Murid</h4>
+              <button class="btn-outline btn-sm" onclick="closePupilDetail()">✖ Tutup</button>
+            </div>
+            <div id="detailAnswersContent"></div>
+          </div>
+
+          <!-- Feedback Moderation Section -->
+          <h3 class="sub-heading" style="margin-top: 2rem;">Moderasi Maklum Balas Murid (Suara Penjelajah Taman)</h3>
+          <div id="teacherFeedbackModerationList" class="moderation-list"></div>
+        </div>
+
+        <!-- Supabase Setup Guide Accordion -->
+        <details class="setup-guide-details">
+          <summary>⚙️ Panduan Sambungan Pangkalan Data Supabase (Merentas Peranti)</summary>
+          <div class="guide-content">
+            <ol>
+              <li>Cipta projek percuma di <a href="https://supabase.com" target="_blank" rel="noopener">Supabase.com</a>.</li>
+              <li>Buka menu <strong>SQL Editor</strong> di Supabase dan jalankan keseluruhan kod daripada fail <code>supabase_setup.sql</code> yang disertakan dalam projek ini.</li>
+              <li>Di Supabase, pergi ke <strong>Authentication ➔ Users</strong> dan cipta akaun pengguna guru (emel & kata laluan).</li>
+              <li>Pergi ke <strong>Project Settings ➔ API</strong> dan salin <code>Project URL</code> serta <code>anon public key</code>. (Jangan sekali-kali masukkan <code>service_role key</code> dalam kod laman web).</li>
+              <li>Tampal nilai tersebut pada pemboleh ubah <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> di bahagian paling atas fail <code>script.js</code>.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ==================== RPH SECTION ==================== -->
+    <section id="sec-rph" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge">Dokumentasi Pedagogi</div>
+        <h2 class="section-title">Rancangan Pengajaran Harian (RPH)</h2>
+        <p class="section-lead">
+          Ruang khusus disediakan untuk memuatkan dokumen RPH Matematik Tahun 1 (Topik: Tambah dalam lingkungan 100 – SP 2.2.2).
+        </p>
+
+        <div class="rph-placeholder-grid">
+          <div class="rph-slot-card">
+            <h4>📄 Dokumen RPH Utama</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk pautan PDF / Google Docs RPH rasmi pembangun]</p>
+          </div>
+          <div class="rph-slot-card">
+            <h4>🎯 Objektif Pembelajaran</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk objektif pembelajaran spesifik mengikut RPH guru]</p>
+          </div>
+          <div class="rph-slot-card">
+            <h4>🧩 Aktiviti Pengajaran & Pembelajaran (PdP)</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk langkah Set Induksi, Perkembangan, dan Penutup]</p>
+          </div>
+          <div class="rph-slot-card">
+            <h4>🛠️ Bahan Bantu Mengajar (BBM)</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk senarai BBM digital dan maujud]</p>
+          </div>
+          <div class="rph-slot-card">
+            <h4>📝 Kaedah Pentaksiran</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk kaedah pentaksiran bilik darjah (PBD)]</p>
+          </div>
+          <div class="rph-slot-card">
+            <h4>🪞 Refleksi Guru</h4>
+            <p class="placeholder-note">[Ruang disediakan untuk catatan refleksi selepas pelaksanaan PdP]</p>
+          </div>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('home')">⬅️ <span data-i18n="btnBackMap">Kembali ke Peta</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PEDAGOGY & MULTIMEDIA DESIGN SECTION ==================== -->
+    <section id="sec-pedagogy" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge">Reka Bentuk Instruksional</div>
+        <h2 class="section-title">Mod Penyampaian & Prinsip Multimedia Mayer</h2>
+
+        <h3 class="sub-heading">1. Mod Penyampaian Pembelajaran Dalam Talian</h3>
+        <div class="pedagogy-grid">
+          <div class="ped-card">
+            <h4>⏱️ Pembelajaran Kendiri (Self-Paced Learning)</h4>
+            <p>Murid boleh mengakses video, penerangan visual, dan papan tambah interaktif mengikut kadar pemahaman masing-masing.</p>
+          </div>
+          <div class="ped-card">
+            <h4>👩‍🏫 Pembelajaran Bimbingan Guru (Teacher-Guided)</h4>
+            <p>Guru boleh membimbing murid semasa aktiviti kelas dan memantau skor serta jawapan individu melalui Papan Pemuka Guru.</p>
+          </div>
+          <div class="ped-card">
+            <h4>🧭 Latihan Bebas (Independent Practice)</h4>
+            <p>Murid melaksanakan aktiviti garis nombor interaktif dan cabaran kuiz secara kendiri di sekolah atau di rumah.</p>
+          </div>
+          <div class="ped-card">
+            <h4>💬 Pembelajaran Berasaskan Maklum Balas (Feedback-Based)</h4>
+            <p>Murid menerima maklum balas segera selepas setiap percubaan manakala guru menyemak perkembangan pembelajaran.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-heading" style="margin-top: 2rem;">2. Aplikasi Teori Kognitif Pembelajaran Multimedia Mayer</h3>
+        <div class="mayer-grid">
+          <div class="mayer-item"><strong>Prinsip Multimedia:</strong> Menggabungkan teks ringkas bersama visual bunga, penanda garis nombor, dan blok nilai tempat yang relevan.</div>
+          <div class="mayer-item"><strong>Prinsip Koheren (Coherence):</strong> Mengelakkan hiasan melampau atau bunyi yang mengganggu fokus kognitif murid Tahun 1.</div>
+          <div class="mayer-item"><strong>Prinsip Isyarat (Signaling):</strong> Menyerlahkan nombor penting serta simbol matematik (<code>+</code> merah dan <code>=</code> kuning) secara konsisten.</div>
+          <div class="mayer-item"><strong>Prinsip Kedekatan Ruang (Spatial Contiguity):</strong> Meletakkan penerangan dan ayat matematik bersebelahan terus dengan ilustrasi kumpulan objek.</div>
+          <div class="mayer-item"><strong>Prinsip Kedekatan Masa (Temporal Contiguity):</strong> Memaparkan animasi lompatan pada garis nombor serentak dengan kiraan langkah.</div>
+          <div class="mayer-item"><strong>Prinsip Segmentasi (Segmenting):</strong> Membahagikan pembelajaran kepada 4 hentian taman yang tersusun dan mudah diikuti.</div>
+          <div class="mayer-item"><strong>Prinsip Personalisasi (Personalization):</strong> Menggunakan bahasa yang mesra, santai, dan dekat dengan dunia kanak-kanak.</div>
+          <div class="mayer-item"><strong>Prinsip Modaliti (Modality):</strong> Menggabungkan penyampaian audio/video bersama perwakilan visual interaktif.</div>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('sec-rph')">📋 Lihat Ruang RPH</button>
+          <button class="btn-outline" onclick="navigateTo('sec-about')">🎓 Profil & Etika Digital</button>
+          <button class="btn-primary-green" onclick="navigateTo('home')">🏡 Kembali ke Peta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT / METADATA & DIGITAL ETHICS ==================== -->
+    <section id="sec-about" class="page-section">
+      <div class="card-surface">
+        <div class="step-badge">Maklumat Projek & Etika</div>
+        <h2 class="section-title">Tentang Laman Web & Pembangun</h2>
+
+        <div class="metadata-layout">
+          <!-- Designated Profile Photo Area (No fake generated portrait) -->
+          <div class="profile-photo-box">
+            <div class="photo-frame-placeholder" id="developerPhotoFrame">
+              <span class="photo-icon">📷</span>
+              <span class="photo-label">Ruang Foto Profil Pembangun</span>
+              <small>(Muat naik fail foto anda dan gantikan ruang ini)</small>
+            </div>
+          </div>
+
+          <div class="metadata-details-table">
+            <div class="meta-row"><span>Nama Pembangun:</span> <strong>Iman Kamila Binti Redzuan</strong></div>
+            <div class="meta-row"><span>Kelas / Kumpulan:</span> <strong>MT1825</strong></div>
+            <div class="meta-row"><span>E-mel Rasmi:</span> <strong>g-ipgp253107870@moe-dl.edu.my</strong></div>
+            <div class="meta-row"><span>Institusi:</span> <strong>Institut Pendidikan Guru Kampus Tun Abdul Razak</strong></div>
+            <div class="meta-row"><span>Mata Pelajaran:</span> <strong>Matematik (Tahun 1)</strong></div>
+            <div class="meta-row"><span>Tajuk:</span> <strong>Tambah (Addition)</strong></div>
+            <div class="meta-row"><span>Standard Kandungan (SK):</span> <strong>2.2 Tambah</strong></div>
+            <div class="meta-row"><span>Standard Pembelajaran (SP):</span> <strong>2.2.2 Menambah dua nombor hasil tambah dalam lingkungan 100</strong></div>
+          </div>
+        </div>
+
+        <!-- Copyright & Digital Ethics Section -->
+        <div class="ethics-card">
+          <h3>🛡️ Hak Cipta dan Etika Digital</h3>
+          <ul>
+            <li><strong>Menghormati Hak Cipta & Harta Intelek:</strong> Semua bahan pembelajaran dibangunkan khusus untuk tujuan pendidikan dengan mematuhi peraturan hak cipta.</li>
+            <li><strong>Penggunaan Media Berlesen & Sumber Sah:</strong> Latar belakang botani menggunakan fotografi alam semula jadi berlesen bebas royalti serta grafik CSS asli, manakala kesan bunyi dijana secara asli melalui Web Audio API.</li>
+            <li><strong>Kredit Sumber Luar:</strong> Video set induksi dipautkan terus secara sah melalui pembenaman rasmi YouTube (<code>youtube.com/watch?v=09t6fLcvxbM</code>).</li>
+            <li><strong>Perlindungan Data Peribadi Murid:</strong> Sistem ini tidak mengumpul atau memaparkan alamat e-mel, nombor kad pengenalan, atau maklumat sensitif murid secara terbuka.</li>
+            <li><strong>Capaian Pangkalan Data Selamat:</strong> Integrasi Supabase menggunakan polisi <em>Row Level Security (RLS)</em> tanpa mendedahkan kunci pentadbir (<code>service_role</code>) pada kod hadapan.</li>
+            <li><strong>Kebenaran Paparan Foto:</strong> Sebarang paparan gambar murid yang boleh dikenal pasti memerlukan kebenaran bertulis daripada ibu bapa/penjaga terlebih dahulu.</li>
+          </ul>
+        </div>
+
+        <div class="section-footer-actions">
+          <button class="btn-outline" onclick="navigateTo('home')">⬅️ <span data-i18n="btnBackMap">Kembali ke Peta</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MINIMAL FOOTER -->
+  <footer class="site-footer no-print">
+    <div class="footer-links">
+      <button onclick="navigateTo('home')">Peta Taman</button> •
+      <button onclick="navigateTo('sec-pedagogy')">Prinsip Pembelajaran</button> •
+      <button onclick="navigateTo('sec-rph')">RPH</button> •
+      <button onclick="navigateTo('sec-about')">Maklumat Pembangun & Etika Digital</button>
+    </div>
+    <p>Taman Tambah Ceria • KSSR Matematik Tahun 1 (SK 2.2 / SP 2.2.2)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
